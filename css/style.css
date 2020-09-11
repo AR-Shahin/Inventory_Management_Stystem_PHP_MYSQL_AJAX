@@ -1,0 +1,124 @@
+*{
+    margin:0;
+    padding:0;
+}
+body{
+    font-family: 'Poppins', sans-serif;
+    background: #ecf0f1;;
+
+}
+
+.login-box{
+    width: 350px;
+    margin: 0 auto;
+    overflow: hidden;
+    box-sizing: border-box;
+    margin-top: 60px;
+}
+.login-box img{
+    width: 50%;
+    margin: 0 auto;
+}
+.login-box label {
+    font-weight: 500;
+    color: #5d5d5d;
+
+}
+/* CSS Loader */
+.overlay{
+
+    display: none;
+
+    position: fixed;
+
+    width: 100%;
+
+    height: 100%;
+
+    background: #fff;
+
+    z-index: 10;
+
+    opacity: 0.7;
+
+}
+
+.loader{
+
+    width: 150px;
+
+    height: 150px;
+
+    border-radius: 50%;
+
+    border:10px solid #333;
+
+    positon: relative;
+
+    margin: 0 auto;
+
+    top: 30%;
+
+    animation:loader 2s linear infinite;
+
+}
+
+@keyframes loader{
+
+    50%{
+
+        opacity: 0.5;
+
+    }
+
+    100% {
+
+        transform:rotate(360deg);
+
+    }
+
+}
+
+.loader:after{
+
+    content: "";
+
+    width: 35px;
+
+    height: 35px;
+
+    background: absolute;
+
+    position: absolute;
+
+    border-radius: 50%;
+
+    top: -10px;
+
+    left: 39px;
+
+}
+
+.loader:before{
+
+    content:"";
+
+    width: 0;
+
+    height: 0;
+
+    border-left: 15px solid transparent;
+
+    border-right: 15px solid transparent;
+
+    border-bottom: 15px solid #333;
+
+    position: absolute;
+
+    transform: rotate(-90deg);
+
+    top: -10px;
+
+    left: 39px;
+
+}
