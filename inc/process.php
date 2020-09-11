@@ -297,4 +297,30 @@ if (isset($_POST["getPriceAndQty"])) {
     echo json_encode($result);
     exit();
 }
+
+if (isset($_POST["order_date"]) AND isset($_POST["cust_name"])) {
+
+    $orderdate = $_POST["order_date"];
+    $cust_name = $_POST["cust_name"];
+
+
+    //Now getting array from order_form
+    $ar_tqty = $_POST["tqty"];
+    $ar_qty = $_POST["qty"];
+    $ar_price = $_POST["price"];
+    $ar_pro_name = $_POST["pro_name"];
+
+
+    $sub_total = $_POST["sub_total"];
+    $gst = $_POST["gst"];
+    $discount = $_POST["discount"];
+    $net_total = $_POST["net_total"];
+    $paid = $_POST["paid"];
+    $due = $_POST["due"];
+    $payment_type = $_POST["payment_type"];
+
+    $m = new Manage();
+    echo $result = $m->storeCustomerOrderInvoice($orderdate,$cust_name,$ar_tqty,$ar_qty,$ar_price,$ar_pro_name,$sub_total,$gst,$discount,$net_total,$paid,$due,$payment_type);
+
+}
 ?>
