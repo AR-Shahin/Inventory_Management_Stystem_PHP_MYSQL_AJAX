@@ -26,8 +26,11 @@ class Manage
         if ($table == "categories") {
             $sql = "SELECT p.cid,p.catname as category, c.catname as parent, p.status FROM categories p LEFT JOIN categories c ON p.parent_cat=c.cid ORDER BY cid DESC ".$a["limit"];
         }else if($table == "products"){
-            $sql = "SELECT p.pid,p.productname,c.catname,b.brandname,p.price,p.quantity,p.added_date,p.status FROM products p,brands b,categories c WHERE p.bid = b.bid AND p.cid = c.cid ".$a["limit"];
-        }else{
+            $sql = "SELECT p.pid,p.productname,c.catname,b.brandname,p.price,p.quantity,p.added_date,p.status FROM products p,brands b,categories c WHERE p.bid = b.bid AND p.cid = c.cid ORDER BY p.pid DESC ".$a["limit"];
+        }else if($table == "invoice"){
+            $sql = "SELECT * FROM `invoice` ORDER BY `invoice_no` DESC ".$a["limit"];
+        }
+        else{
             $sql = "SELECT * FROM ".$table."  "."ORDER BY bid DESC". "  ".$a["limit"];
         }
         #$result = Database::connect($sql);
@@ -107,10 +110,10 @@ class Manage
     public function deleteRecord($table,$pk,$id){
         if($table == "categories"){
 
-           # $pre_stmt = $this->con->prepare("SELECT ".$id." FROM categories WHERE parent_cat = ?");
-          #  $pre_stmt->bind_param("i",$id);
-          #  $pre_stmt->execute();
-          #  $result = $pre_stmt->get_result() or die($this->con->error);
+            # $pre_stmt = $this->con->prepare("SELECT ".$id." FROM categories WHERE parent_cat = ?");
+            #  $pre_stmt->bind_param("i",$id);
+            #  $pre_stmt->execute();
+            #  $result = $pre_stmt->get_result() or die($this->con->error);
             $sql = "SELECT ".$id." FROM categories WHERE parent_cat = ".$id ."";
             $result = $this->con->query($sql);
             if ($result->num_rows > 0) {
@@ -192,7 +195,23 @@ class Manage
             return $invoice_no;
         }
 
-
+    }
+    public function getAllDueOrder(){
+        $sql = "SELECT * FROM `invoice` WHERE due != 0 ORDER BY `invoice_no` DESC ";
+        $res = $this->con->query($sql);
+        return $res;
+    }
+    public function updateDuePayment($invId,$amt){
+        $res = $this->getSingleData('invoice','invoice_no',$invId);
+         $data = $res['paid'] *1;
+        $newamt = ($data*1) + $amt;
+        $sql = "UPDATE `invoice` SET `paid` = '$newamt' ,`due` = 0 WHERE `invoice_no` = $invId";
+        $res1 = $this->con->query($sql);
+        if($res1){
+            return "SUCCESS";
+        }else{
+            return 'FAIL';
+        }
 
     }
 }

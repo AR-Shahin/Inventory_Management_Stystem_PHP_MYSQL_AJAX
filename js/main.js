@@ -543,23 +543,23 @@ $(document).ready(function () {
 
 
 
-$('#invoice_item').delegate(".qty","keyup",function () {
-    var qty = $(this);
-    var tr = $(this).parent().parent();
-    if(isNaN(qty.val())){
-        alert("Please enter a valid Quantity");
-        qty.val(1);
-    }else {
-        if ((qty.val() - 0) > (tr.find(".tqty").val()-0)) {
-            alert("Sorry ! This much of quantity is not available");
+    $('#invoice_item').delegate(".qty","keyup",function () {
+        var qty = $(this);
+        var tr = $(this).parent().parent();
+        if(isNaN(qty.val())){
+            alert("Please enter a valid Quantity");
             qty.val(1);
         }else {
-            tr.find(".amt").html(qty.val() * tr.find(".price").val());
-            calculate(0,0);
+            if ((qty.val() - 0) > (tr.find(".tqty").val()-0)) {
+                alert("Sorry ! This much of quantity is not available");
+                qty.val(1);
+            }else {
+                tr.find(".amt").html(qty.val() * tr.find(".price").val());
+                calculate(0,0);
+            }
         }
-    }
 
-});
+    });
 
     function calculate(dis,paid){
         var sub_total = 0;
@@ -572,9 +572,12 @@ $('#invoice_item').delegate(".qty","keyup",function () {
             sub_total = sub_total + ($(this).html() * 1);
         })
         gst = 0.18 * sub_total;
+
         net_total = gst + sub_total;
         net_total = net_total - discount;
+//net_total = net_total.toFixed(2);
         due = net_total - paid_amt;
+       // due = due.toFixed(2);
         $("#gst").val(gst);
         $("#sub_total").val(sub_total);
 
@@ -582,6 +585,9 @@ $('#invoice_item').delegate(".qty","keyup",function () {
         $("#net_total").val(net_total);
         //$("#paid")
         $("#due").val(due);
+        if(due<0){
+            alert("Negative number");
+        }
 
     }
 
@@ -630,6 +636,31 @@ $('#invoice_item').delegate(".qty","keyup",function () {
 
     });
 
+    var table = $('#example').DataTable( {
+        fixedHeader: true
+    } );
 
+//manage order
+    manageOrder(1);
+    function manageOrder(pn){
+        $.ajax({
+            url : "./inc/process.php",
+            method : "POST",
+            data : {manageOrder:1,pageno:pn},
+            success : function(data){
+                $("#get_order").html(data);
+            }
+        })
+    }
 
+    $("body").delegate(".page-link","click",function(){
+        var pn = $(this).attr("pn");
+        manageOrder(pn);
     });
+
+
+//----------------------------
+
+
+});
+

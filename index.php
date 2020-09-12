@@ -36,6 +36,7 @@ if(!isset( $_SESSION['loginSuccess'])){
                                 <h5 class="card-title">Orders</h5>
                                 <p class="card-text">Some quick exampl of the card's content.</p>
                                 <a href="newOrder.php" class="btn btn-primary"> <i class="fa fa-plus mr-1"></i> New Order</a>
+                                <a href="manageOrder.php" class="btn btn-info"> <i class="fa fa-magic mr-1"></i> Manage Order</a>
                             </div>
                         </div>
                     </div>

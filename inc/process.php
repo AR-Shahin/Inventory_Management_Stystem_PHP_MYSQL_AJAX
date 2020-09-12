@@ -323,4 +323,48 @@ if (isset($_POST["order_date"]) AND isset($_POST["cust_name"])) {
     echo $result = $m->storeCustomerOrderInvoice($orderdate,$cust_name,$ar_tqty,$ar_qty,$ar_price,$ar_pro_name,$sub_total,$gst,$discount,$net_total,$paid,$due,$payment_type);
 
 }
+
+//manage order
+
+if (isset($_POST["manageOrder"])) {
+    $m = new Manage();
+    $result = $m->manageRecordWithPagination("invoice",$_POST["pageno"]);
+    $rows = $result["rows"];
+    $pagination = $result["pagination"];
+    if (count($rows) > 0) {
+        $n = (($_POST["pageno"] - 1) * 5)+1;
+        foreach ($rows as $row) {
+            ?>
+            <tr class="text-center">
+                <td><?php echo $n; ?></td>
+                <td class="text-left"><?php echo ucwords($row["customer_name"]); ?></td>
+                <td ><?php echo ucwords($row["order_date"]); ?></td>
+                <td ><?php echo ucwords($row["sub_total"]); ?></td>
+                <td ><?php echo ucwords($row["gst"]); ?></td>
+                <td ><?php echo ucwords($row["discount"]); ?></td>
+                <td ><?php echo ucwords($row["net_total"]); ?></td>
+                <td ><?php echo ucwords($row["paid"]); ?></td>
+                <td ><?php echo ucwords($row["due"]); ?></td>
+                <td ><?php echo ucwords($row["payment_type"]);  ?></td>
+                <td style="overflow:hidden;">
+                    <?php
+                    if($row["due"] == 0){
+                        echo '<span><a href="" class="btn btn-success">Paid</a></span>';
+                    }else{
+                        echo '<span><a href="" class="btn btn-danger">Due</a></span>';
+                    }
+                    ?>
+                </td>
+            </tr>
+            <?php
+            $n++;
+        }
+        ?>
+        <tr><td colspan="5"><?php echo $pagination; ?></td></tr>
+        <?php
+        exit();
+    }
+}
+//----------------
+
 ?>
